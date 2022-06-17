@@ -1,0 +1,150 @@
+{
+  "type": [
+    "null",
+    "object"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "campaign": {
+      "type": [
+        "integer"
+      ]
+    },
+    "campaign_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "clicks": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "impressions": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "visible_impressions": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "spent": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "conversions_value": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "roas": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "ctr": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "vctr": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "cpm": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "vcpm": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpc": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "campaigns_num": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cpa": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpa_clicks": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpa_views": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpa_actions_num": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cpa_actions_num_from_clicks": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cpa_actions_num_from_views": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cpa_conversion_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpa_conversion_rate_views": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "currency": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  }
+}

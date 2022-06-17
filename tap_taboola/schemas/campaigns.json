@@ -1,0 +1,96 @@
+{
+  "type": ["null", "object"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": ["integer"]
+    },
+    "advertiser_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": ["null", "string"]
+    },
+    "tracking_code": {
+      "type": ["null", "string"]
+    },
+    "cpc": {
+      "type": ["null", "number"]
+    },
+    "daily_cap": {
+      "type": ["null", "number"]
+    },
+    "spending_limit": {
+      "type": ["null", "number"]
+    },
+    "spending_limit_model": {
+      "type": ["null", "string"]
+    },
+
+    "country_targeting": {
+      "type": ["object", "null"],
+      "properties": {
+        "type": {
+          "type": ["string", "null"]
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+
+    "platform_targeting": {
+      "type": ["object", "null"],
+      "properties": {
+        "type": {
+          "type": ["string", "null"]
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+
+    "publisher_targeting": {
+      "type": ["object", "null"],
+      "properties": {
+        "type": {
+          "type": ["string", "null"]
+        },
+        "value": {
+          "type": ["array", "null"],
+          "items": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+
+    "start_date": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "end_date": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "approval_state": {
+      "type": ["string", "null"]
+    },
+    "is_active": {
+      "type": ["boolean", "null"]
+    },
+    "spent": {
+      "type": ["null", "number"]
+    },
+    "status": {
+      "type": ["string", "null"]
+    }
+  }
+}
