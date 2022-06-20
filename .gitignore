@@ -88,3 +88,13 @@ ENV/
 # Rope project settings
 .ropeproject
 *~
+
+# Pycharm
+.idea
+
+# Debug
+debug*.py
+
+# Config files
+catalog*.json
+config*.json
