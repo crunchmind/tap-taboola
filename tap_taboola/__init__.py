@@ -7,6 +7,9 @@ from singer.catalog import Catalog, CatalogEntry
 from singer.schema import Schema
 import requests
 import backoff
+import multiprocessing
+import concurrent.futures
+import random
 
 REQUIRED_CONFIG_KEYS = ['start_date', 'account_id']
 ACCESS_TOKEN_CONFIG_KEY = 'access_token'
@@ -17,6 +20,21 @@ LOGGER = get_logger()
 
 class TapTaboolaException(Exception):
     pass
+
+
+def create_thread_pool_executor(max_workers=multiprocessing.cpu_count() * 5):
+    return concurrent.futures.ThreadPoolExecutor(max_workers=max_workers)
+
+
+def wait_all(futures):
+    results = []
+    for future in futures:
+        try:
+            results.append(future.result())
+        except Exception as e:
+            LOGGER.critical(e)
+
+    return results
 
 
 @backoff.on_exception(backoff.expo,
@@ -191,7 +209,7 @@ def initialize_stream(stream_id, schema):
     key_properties = []
     stream_metadata = []
 
-    if stream_id == 'campaigns':
+    if stream_id in ['campaigns', 'items']:
         key_properties = ['id']
         stream_metadata = metadata.get_standard_metadata(schema, key_properties=key_properties)
     elif stream_id in ['campaign_day_performance', 'campaign_hourly_performance']:
@@ -268,6 +286,52 @@ def fetch_campaign_hourly_performance(config, state):
     return campaign_performance.json().get('results')
 
 
+def fetch_campaign_items(config, campaign_id):
+    account_id = config.get('account_id')
+    access_token = config.get('access_token')
+
+    url = ('{}/backstage/api/1.0/{}/campaigns/{}/items/'.format(BASE_URL, account_id, campaign_id))
+
+    response = request(url, access_token)
+    return response.json().get('results')
+
+
+def sync_campaign_items(config, state, stream, transformer, schema, map_metadata, campaign_id, time_extracted):
+    campaign_items = fetch_campaign_items(config, campaign_id)
+    for campaign_item in campaign_items:
+        record = transformer.transform(campaign_item, schema, metadata=map_metadata)
+        write_record(stream.tap_stream_id, record, stream.stream_alias, time_extracted)
+
+
+def sample_percent_paused_campaigns(paused_campaigns_ids, sample_percent):
+    random.shuffle(paused_campaigns_ids)
+    amount_of_campaigns = round(len(paused_campaigns_ids) * (sample_percent / 100))
+    LOGGER.info(f'sampling {amount_of_campaigns} paused campaigns')
+    return paused_campaigns_ids[:amount_of_campaigns]
+
+
+def sync_campaigns_items(config, state, stream, schema, map_metadata):
+    campaigns = fetch_campaigns(config)
+    campaign_ids = [c['id'] for c in campaigns if c['status'] not in ['PAUSED', 'TERMINATED']]
+    paused_campaigns_ids = [c['id'] for c in campaigns if c['status'] == 'PAUSED']
+
+    if config.get('sampling_percent_paused_campaigns_items') and \
+            isinstance(config['sampling_percent_paused_campaigns_items'], int):
+        paused_campaigns_ids = \
+            sample_percent_paused_campaigns(paused_campaigns_ids, config['sampling_percent_paused_campaigns_items'])
+
+    campaign_ids.extend(paused_campaigns_ids)
+    time_extracted = utils.now()
+    transformer = Transformer()
+    executor = create_thread_pool_executor(max_workers=config.get('items_max_workers', 5))
+    futures = []
+    for campaign_id in campaign_ids:
+        futures.append(executor.submit(sync_campaign_items, config, state, stream, transformer, schema, map_metadata,
+                                       campaign_id, time_extracted))
+
+    wait_all(futures)
+
+
 def sync(config, state, catalog):
     """ Sync data from tap source """
     if not verify_account_access(config):
@@ -276,6 +340,7 @@ def sync(config, state, catalog):
     for stream in catalog.get_selected_streams(state):
         LOGGER.info("Syncing stream:" + stream.tap_stream_id)
 
+        results = []
         schema = load_schema(stream)
         map_metadata = metadata.to_map(stream.metadata)
         write_schema(
@@ -290,6 +355,8 @@ def sync(config, state, catalog):
             results = fetch_campaign_day_performance(config, state)
         elif stream.tap_stream_id == 'campaign_hourly_performance':
             results = fetch_campaign_hourly_performance(config, state)
+        elif stream.tap_stream_id == 'items':
+            sync_campaigns_items(config, state, stream, schema, map_metadata)
         else:
             raise TapTaboolaException('Unknown stream {}'.format(stream.tap_stream_id))
 

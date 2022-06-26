@@ -1,0 +1,66 @@
+{
+  "type": ["null", "object"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "campaign_id": {
+      "type": "integer"
+    },
+    "type": {
+      "type": ["null", "string"]
+    },
+    "url": {
+      "type": ["null", "string"]
+    },
+    "title": {
+      "type": ["null", "string"]
+    },
+    "description": {
+      "type": ["null", "string"]
+    },
+    "approval_state": {
+      "type": ["null", "string"]
+    },
+    "is_active": {
+      "type": ["null", "boolean"]
+    },
+    "status": {
+      "type": ["null", "string"]
+    },
+    "cta": {
+      "type": ["null", "string"]
+    },
+    "verification_pixel": {
+      "type": ["null", "string"]
+    },
+    "viewability_tag": {
+      "type": ["null", "string"]
+    },
+
+    "policy_review": {
+      "type": ["object", "null"],
+      "properties": {
+        "reject_reason": {
+          "type": ["string", "null"]
+        },
+        "status_reason": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+
+    "creative_focus": {
+      "type": ["object", "null"],
+      "properties": {
+        "type": {
+          "type": ["string", "null"]
+        },
+        "coordinates": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}

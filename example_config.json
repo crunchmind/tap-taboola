@@ -1,6 +1,8 @@
 {
   "account_id": "",
-  "start_date": "2022-06-16",
-  "end_date": "2022-06-16",
-  "access_token": ""
+  "start_date": "2022-06-23",
+  "end_date": "2022-06-23",
+  "access_token": "",
+  "sampling_percent_paused_campaigns_items": 5,
+  "items_max_workers": 5
 }
