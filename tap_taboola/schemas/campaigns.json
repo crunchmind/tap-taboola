@@ -27,6 +27,33 @@
       "type": ["null", "string"]
     },
 
+    "os_targeting": {
+      "type": ["object", "null"],
+      "properties": {
+        "type": {
+          "type": ["string", "null"]
+        },
+        "value": {
+          "type": "array",
+          "items": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+
+    "publisher_bid_modifier": {
+      "type": ["object", "null"],
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+
     "country_targeting": {
       "type": ["object", "null"],
       "properties": {
@@ -72,6 +99,21 @@
       }
     },
 
+    "browser_targeting": {
+      "type": ["object", "null"],
+      "properties": {
+        "type": {
+          "type": ["string", "null"]
+        },
+        "value": {
+          "type": ["array", "null"],
+          "items": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+
     "start_date": {
       "type": ["string", "null"],
       "format": "date"
@@ -90,6 +132,21 @@
       "type": ["null", "number"]
     },
     "status": {
+      "type": ["string", "null"]
+    },
+    "comments": {
+      "type": ["string", "null"]
+    },
+    "marketing_objective": {
+      "type": ["string", "null"]
+    },
+    "type": {
+      "type": ["string", "null"]
+    },
+    "bid_type": {
+      "type": ["string", "null"]
+    },
+    "bid_strategy": {
       "type": ["string", "null"]
     }
   }
